@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Tello</title>
+<script type="text/javascript" src="jsmpeg.min.js"></script>
+<script type="text/javascript" src="index.js"></script>
+<link type="text/css" href="index.css" rel="stylesheet">
+</head>
+<body>
+<div id=tableY>
+<button onclick="connect(1)" id=connect1>Connect</button>
+<button onclick="connect(0)" id=connect0>Disconnect</button>
+&nbsp;
+<button onclick="stream(1)" id=stream1>Stream On</button>
+<button onclick="stream(0)" id=stream0>Stream Off</button>
+&nbsp;
+<button onclick="takeoff(1)" id=takeoff1>Take off</button>
+<button onclick="takeoff(0)" id=takeoff0>Auto land</button>
+<button onclick="takeoff(-1)" id=poweroff>Emergency</button>
+</div>
+<div id=tableX>
+<div id=table0><canvas id="video-canvas"></canvas></div>
+
+<div id=table1>
+<table border=0>
+<tr><td>電気残量:</td><td id=bat ></td></tr>
+<tr><td>フライト:</td><td id=time ></td></tr>
+<tr><td>TOF高度:</td><td id=tof ></td></tr>
+<tr><td>高度:</td><td id=h ></td></tr>
+<tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+</table>
+</div>
+
+<div id=tableG>
+<pre>　Ｗ　　　　↑　　
+Ａ　Ｄ　　←　→　
+　Ｓ　　　　↓　　</pre>
+</div>
+
+<div id=table3>
+<table border=0>
+<tr><td><div style="position:relative;width:100px;height:75px;">
+<img id=imgz src=tello-f.png >
+<div id=ru>&#x27A0;</div>
+<div id=rd>&#x27A0;</div>
+<div id=rl>&#x21BA;</div>
+<div id=rr>&#x21BB;</div>
+</div></td></tr>
+<tr><td><div style="position:relative;width:100px;">
+<img id=img0 src=tello0.png >
+<img id=img1 src=tello1.png>
+<img id=img2 src=tello2.png>
+<img id=img4 src=tello3.png>
+<img id=img3 src=tello4.png>
+<div id=g0>&#x27A4;</div>
+<div id=g3>&#x27A4;</div>
+<div id=g6>&#x27A4;</div>
+<div id=g9>&#x27A4;</div>
+</div>
+</td></tr>
+</table>
+</div>
+
+<div id=table2>
+<table border=0>
+<tr><td>ピッチ:</td><td id=pitch></td></tr>
+<tr><td>ロール:</td><td id=roll ></td></tr>
+<tr><td>ヨー:</td><td id=yaw ></td></tr>
+<tr><td>速度 X:</td><td id=vgx></td></tr>
+<tr><td>速度 Y:</td><td id=vgy ></td></tr>
+<tr><td>速度 Z:</td><td id=vgz ></td></tr>
+
+<tr><td>加速度 X:</td><td id=agx ></td></tr>
+<tr><td>加速度 Y:</td><td id=agy ></td></tr>
+<tr><td>加速度 Z:</td><td id=agz ></td></tr>
+<tr><td>気圧:</td><td id=baro ></td></tr>
+<tr><td>最高温度:</td><td id=temph ></td></tr>
+<tr><td>最低温度:</td><td id=templ ></td></tr>
+<tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+</table></div>
+</div>
+<div id="tello-message"></div>
+</body>
+</html>
+

@@ -1,0 +1,226 @@
+#video-canvas {
+	width: 640px;
+	height: 360px;
+	display: none;
+}
+
+#tableX {
+	margin-top: 5px;
+	position: relative;
+	width: 640px;
+	height: 360px;
+	border: 1px solid #ccc;
+}
+#tableY {
+	position: relative;
+	width: 640px;
+}
+#tableZ {
+	margin-top: 5px;
+	position: relative;
+	width: 640px;
+}
+#poweroff {
+	position: absolute;
+	right: 2px;
+	top: 2px;
+}
+#tableG,
+#table1,
+#table2 {
+	position: absolute;
+	z-index:1;
+	font-size: small;
+	text-align: right;
+	text-shadow:
+		-1px -1px 1px white,
+		1px -1px 1px white,
+		-1px 1px 1px white,
+		1px 1px 1px white,
+		-1px 0px 1px white,
+		1px 0px 1px white,
+		0px 1px 1px white,
+		0px -1px 1px white;
+}
+#table1 {
+	left:2px;
+	top: 2px;
+}
+#table2 {
+	right:2px;
+	top: 2px;
+}
+#table0 {
+	width: 640px;
+	height: 360px;
+	background: url(./tello.jpg);
+	background-repeat: no-repeat;
+	background-size: contain;
+	backdrop-filter: opacity(0);
+	background-color: rgba(255,255,255,0.85);
+	background-blend-mode: soft-light;
+}
+
+#tableG {
+	right:2px;
+	bottom: 2px;
+	display: none;
+}
+
+#table3 {
+	background: transparent;
+	position: absolute;
+	color:red;
+	font-size: small;
+	left:2px;
+	bottom: 2px;
+	display: none;
+}
+#img0 {
+	width: 100px;
+	height: 100px;
+}
+#img0, #img1, #img2, #img3, #img4, #imgz {
+	filter: drop-shadow(0px 0px 3px white);
+}
+#img1, #img2, #img3, #img4 {
+        position: absolute;
+        display: inline-block;
+	z-index:1;
+	width: 46.6px;
+	height: 46.6px;
+	line-height: 46.6px;
+}
+#img1 {
+	left:0px;
+	top:0px;
+}
+#img1.go {
+	animation:rotate0 0.5s infinite linear;
+	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
+}
+#img2 {
+	right:0px;
+	top:0px;
+}
+#img2.go {
+	animation:rotate1 0.5s infinite linear;
+	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
+}
+#img3 {
+	right:0px;
+	bottom:9px;
+}
+#img3.go {
+	animation:rotate0 0.5s infinite linear;
+	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
+}
+#img4 {
+	left:0;
+	bottom:10px;
+}
+#img4.go {
+	animation:rotate1 0.5s infinite linear;
+	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
+}
+
+#imgz {
+	width: 120px;
+	height: auto;
+	position: absolute;
+	left: -10px;
+	top:-5px;
+}
+
+@keyframes rotate0 {
+   0% {
+       transform:rotate(0deg);
+   }
+   25% {
+       transform:rotate(90deg);
+   }
+   50% {
+       transform:rotate(180deg);
+   }
+   75% {
+       transform:rotate(270deg);
+   }
+   100% {
+       transform:rotate(360deg);
+   }
+}
+
+@keyframes rotate1 {
+   0% {
+       transform:rotate(0deg);
+   }
+   25% {
+       transform:rotate(-90deg);
+   }
+   50% {
+       transform:rotate(-180deg);
+   }
+   75% {
+       transform:rotate(-270deg);
+   }
+   100% {
+       transform:rotate(-360deg);
+   }
+}
+
+#g0, #g3, #g6, #g9, #rl, #rr, #ru, #rd {
+	position: absolute;
+	display:none;
+	font-size:36px;
+	color: #0f0;
+	filter: drop-shadow(0px 0px 1px black);
+	z-index:2;
+}
+#rl {
+	top: calc(50% - 34px);
+	left: calc(50% - 14px);
+	font-size:42px;
+	transform: scale(2.5, 1);
+}
+#rr {
+	top: calc(50% - 34px);
+	left: calc(50% - 16px);
+	transform: scale(2.5, 1);
+	font-size:42px;
+}
+#ru {
+	top: calc(50% - 36px);
+	left: calc(50% - 26px);
+	transform: rotate(-90deg);
+}
+#rd {
+	top: calc(50% - 24px);
+	left: calc(50% - 29px);
+	transform: rotate(90deg);
+}
+
+#g0 {
+	top: calc(50% - 44px);
+	left: calc(50% - 17px);
+	transform: rotate(-90deg);
+}
+#g3 {
+	top: calc(50% - 30px);
+	left: calc(50% - 10px);
+}
+#g6 {
+	top: calc(50% - 24px);
+	left: calc(50% - 20px);
+	transform: rotate(90deg);
+}
+#g9 {
+	top: calc(50% - 32px);
+	left: calc(50% - 28px);
+	transform: rotate(180deg);
+}
+
+#connect0, #stream0, #stream1,
+#poweroff,
+#takeoff1, #takeoff0 {
+	display: none;
+}
