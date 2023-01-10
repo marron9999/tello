@@ -23,9 +23,20 @@ window.onload = function() {
 
 	ws = new WebSocket('ws://' + server + ':8082');
 	ws.onmessage = function (event) {
-		if(event.data == "connect ok") {
-			connected();
+		if(event.data == "command ok") {
 			return;
+		}
+		if(event.data == "connect ok") {
+			connected(1);
+		} else
+		if(event.data == "disconnect ok") {
+			connected(0);
+		} else
+		if(event.data == "streamon ok") {
+			elm('video-canvas').style.display = "inline-block";
+		} else
+		if(event.data == "streamoff ok") {
+			elm('video-canvas').style.display = "none";
 		}
 		let json = {};
 		let er=1;
@@ -46,9 +57,11 @@ window.onload = function() {
 			}
 		}
 		if(er>0) {
-			elm('tello-message').innerHTML = event.data;
-		} else {
-			elm('tello-message').innerHTML = "";
+			let e = elm('tello-message');
+			let p = e.innerHTML.indexOf("</div>");
+			e.innerHTML = e.innerHTML.substr(p+6)
+				+ "<div>" + event.data + "</div>";
+			e.scrollBy(0, 9999);
 		}
 	}
 
@@ -74,13 +87,13 @@ function keydown(event) {
 	if(event.code == "KeyA") {
 		vkey = event.code;
 		elm("rl").style.display = "inline-block";
-		let cmd = "cw 30";
+		let cmd = "ccw 30";
 		ws.send(cmd);
 	}
 	if(event.code == "KeyD") {
 		vkey = event.code;
 		elm("rr").style.display = "inline-block";
-		let cmd = "ccw 30";
+		let cmd = "cw 30";
 		ws.send(cmd);
 	}
 	if(event.code == "ArrowUp") {
@@ -141,38 +154,39 @@ function keyup(event) {
 function connect(sw) {
 	if(sw > 0) {
 		ws.send("connect");
-	} else {
-		ws.send("disconnect");
-		elm("connect1").style.display = "inline-block";
-		elm("connect0").style.display = "none";
-		elm("stream0" ).style.display = "none";
-		elm("stream1" ).style.display = "none";
-		elm("takeoff1").style.display = "none";
-		elm("takeoff0").style.display = "none";
-		elm("poweroff").style.display = "none";
-		elm("table3").style.display = "none";
-		elm("tableG").style.display = "none";
+		return;
 	}
+	ws.send("disconnect");
 }
-function connected() {
-	elm("connect1").style.display = "none";
-	elm("connect0").style.display = "inline-block";
-	elm("stream0" ).style.display = "inline-block";
-	elm("stream1" ).style.display = "inline-block";
-	elm("takeoff1").style.display = "inline-block";
-	elm("takeoff0").style.display = "inline-block";
-	elm("poweroff").style.display = "inline-block";
-	elm("table3").style.display = "inline-block";
-	elm("tableG").style.display = "inline-block";
+function connected(sw) {
+	if(sw > 0) {
+		elm("connect1").style.display = "none";
+		elm("connect0").style.display = "inline-block";
+		elm("stream0" ).style.display = "inline-block";
+		elm("stream1" ).style.display = "inline-block";
+		elm("takeoff1").style.display = "inline-block";
+		elm("takeoff0").style.display = "inline-block";
+		elm("poweroff").style.display = "inline-block";
+		elm("table3").style.display = "inline-block";
+		elm("tableG").style.display = "inline-block";
+		return;
+	}
+	elm("connect1").style.display = "inline-block";
+	elm("connect0").style.display = "none";
+	elm("stream0" ).style.display = "none";
+	elm("stream1" ).style.display = "none";
+	elm("takeoff1").style.display = "none";
+	elm("takeoff0").style.display = "none";
+	elm("poweroff").style.display = "none";
+	elm("table3").style.display = "none";
+	elm("tableG").style.display = "none";
 }
 function stream(sw) {
 	if(sw > 0) {
-		elm('video-canvas').style.display = "inline-block";
 		ws.send("streamon");
 		return;
 	}
 	ws.send("streamoff");
-	elm('video-canvas').style.display = "none";
 }
 function takeoff(sw) {
 	if(sw > 0) {

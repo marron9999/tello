@@ -24,10 +24,7 @@ const TELLO_PORT = 8889
 // -----------------
 const httpServer = http.createServer(function(request, response) {
 	console.log('HTTP:' + HTTP_PORT
-		+ ' from ' + request.socket.remoteAddress
-		+ ':' + request.socket.remotePort
-		+ ' ' + request.url
-	);
+		+ ' from ' + request.socket.remoteAddress);
 	fs.readFile(__dirname + '/html/' + request.url, function (err,data) {
 		if (err) {
 			response.writeHead(404);
@@ -45,18 +42,38 @@ console.log("Create HTTP server " + HTTP_PORT);
 // Stream serverを作る 
 // --------------------
 const streamServer = http.createServer((request, response) => {
-  console.log(
+	console.log(
 		'Stream:' + FFMPEG_PORT
-		+ ' from ' + request.socket.remoteAddress
-		+ ':' + request.socket.remotePort
-	);
+		+ ' from ' + request.socket.remoteAddress);
 	request.on('data', function(data) {
+		wsServer.clients.forEach((cl) => {
+			if (cl.readyState === ws.OPEN
+			&&  cl.readyStream != true) {
+				cl.readyStream = true;
+				cl.send("streamon ok");
+			}
+		});
 		wsStreamServer.clients.forEach((client) => {
 			if (client.readyState === ws.OPEN) {
 				client.send(data);
 			}
 		});
-  });
+		request.on('connect', function(data) {
+			console.log('Stream connect:'
+				+ ' from ' + request.socket.remoteAddress);
+		});
+		request.on('close', function(data) {
+			console.log('Stream close:'
+				+ ' from ' + request.socket.remoteAddress);
+			wsServer.clients.forEach((cl) => {
+				if (cl.readyState === ws.OPEN
+				&&  cl.readyStream == true) {
+					cl.send("streamoff ok");
+				}
+				cl.readyStream = false;
+			});
+		});
+	});
 }).listen(FFMPEG_PORT);
 const wsStreamServer = new ws.Server({ server: streamServer });
 console.log("Create Stream server " + FFMPEG_PORT);
@@ -64,33 +81,79 @@ console.log("Create Stream server " + FFMPEG_PORT);
 // ----------------------
 // Websocket serverを作る
 // ----------------------
-const tello_cb = (error, bytes) => {  if (error) console.log(error); };
-const tello_send = (cmd) => {
-	if(udpClient != null) {
-		console.log("Send: " + cmd + " to UDP");
-	 	udpClient.send(cmd, TELLO_PORT, TELLO_IP, tello_cb);
-	}
-};
-var lock = 0
+var connect = null;
+var lastcmd = null;
 const wsServer = new ws.Server({ port: SOCKET_PORT});
-wsServer.on('connection', (client) => {
+wsServer.on('connection', (client, request) => {
+	console.log("WS connect: "
+			+ ' from ' + request.socket.remoteAddress);
+	client.remoteAddress = request.socket.remoteAddress;
+	client.on('close', () => {
+		console.log("WS close: "
+				+ ' from ' + client.remoteAddress);
+		if(connect == client.remoteAddress) {
+			connect = null;
+		}
+	});
 	client.on('message', (data) => {
+		console.log("WS recv: " + data
+				+ ' from ' + client.remoteAddress);
 		if(data == "connect") {
-			if(lock == 0) {
-				lock = client.remoteAddress;
-				client.send("connect ok");
+			if(connect == null) {
+				let req = client.remoteAddress;
+				wsServer.clients.forEach((cl) => {
+					if (cl.readyState === ws.OPEN) {
+						if(cl.remoteAddress == client.remoteAddress) {
+							connect = client.remoteAddress;
+							cl.send("connect ok");
+							wsServer.clients.forEach((cl) => {
+								if (cl.readyState === ws.OPEN) {
+									if(cl.remoteAddress != req) {
+										cl.send("lock " + req);
+									}
+								}
+							});
+							return;
+						}
+					}
+				});
 			}
 			return;
 		}
 		if(data == "disconnect") {
-			if(lock == client.remoteAddress) {
-				lock = 0;
-				client.send("disconnect ok");
+			if(connect != null) {
+				let req = connect;
+				wsServer.clients.forEach((cl) => {
+					if (cl.readyState === ws.OPEN) {
+						if(connect == client.remoteAddress) {
+							connect = null;
+							client.send("disconnect ok");
+							wsServer.clients.forEach((cl) => {
+								if (cl.readyState === ws.OPEN) {
+									if(req != cl.remoteAddress) {
+										cl.send("lock no");
+									}
+								}
+							});
+							return;
+						}
+					}
+				});
 			}
 			return;
 		}
-		if(lock == client.remoteAddress) {
-			tello_send(data);
+		if(connect == client.remoteAddress) {
+			if(lastcmd == "command") {
+				lastcmd = null;
+			}
+			if(tello_timer != null)
+				clearTimeout(tello_timer);
+			if(lastcmd == null) {
+				lastcmd = data;
+				tello_send(data);
+			} else {
+				client.send("budy: " + data);
+			}
 		}
 	});
 });
@@ -99,26 +162,56 @@ console.log("Create Websocket server " + SOCKET_PORT);
 // ----------------------
 // TELLOとのUDP通信を作る
 // ----------------------
+const tello_cb = (error, bytes) => {  if (error) console.log(error); };
+const tello_send = (cmd) => {
+	if(udpClient != null) {
+		console.log("Send: " + cmd + " to UDP");
+	 	udpClient.send(cmd, TELLO_PORT, TELLO_IP, tello_cb);
+		tello_command();
+	}
+};
+let tello_timer = null;
 const udpClient = dgram.createSocket('udp4');
 udpClient.on('message', (message, remote) => {
 	message = "" + message;
-	if( ! message.startsWith("pitch:"))
-		console.log("UDP: " + remote.address + ':' + remote.port +' ' + message);
+	if(message.startsWith("pitch:")) {
+		wsServer.clients.forEach((client) => {
+			if (client.readyState === ws.OPEN) {
+				client.send(message);
+			}
+		});
+		return;
+	}
+	if(tello_timer != null) {
+		clearTimeout(tello_timer);
+	}
+	if(lastcmd != null) {
+		message = lastcmd + " " + message;
+		lastcmd = null;
+	}
+	console.log("UDP: " + remote.address + ':' + remote.port + ' ' + message);
 	wsServer.clients.forEach((client) => {
 		if (client.readyState === ws.OPEN) {
-			client.send("" + message);
+			client.send(message);
 		}
 	});
+	tello_timer = setTimeout(tello_command, 5000);
 });
 udpClient.bind(HOST_PORT, HOST_IP);
 console.log("Open UDP " + HOST_IP + " " + HOST_PORT);
-// -----------
-// TELLOに接続
-// -----------
-tello_send("command");
-setInterval(() => {
-	tello_send("time?");
-}, 10000);
+const tello_command = () => {
+	if(tello_timer != null)
+		clearTimeout(tello_timer);
+	if(lastcmd == "command")
+		lastcmd = null;
+	if(lastcmd == null) {
+		lastcmd = "command";
+		console.log("Send: " + lastcmd + " to UDP");
+	 	udpClient.send(lastcmd, TELLO_PORT, TELLO_IP, tello_cb);
+	}
+	tello_timer = setTimeout(tello_command, 5000);
+};
+
 // ----------------
 // FFMPEGを起動する
 // ----------------
@@ -138,3 +231,5 @@ streamer.on("exit", function(code){
 	console.log("ffmpeg failure:", code);
 });
 console.log("Start FFMPEG");
+
+tello_command();

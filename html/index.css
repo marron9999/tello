@@ -59,6 +59,7 @@
 	backdrop-filter: opacity(0);
 	background-color: rgba(255,255,255,0.85);
 	background-blend-mode: soft-light;
+	background-position: center;
 }
 
 #tableG {
@@ -89,7 +90,7 @@
 	z-index:1;
 	width: 46.6px;
 	height: 46.6px;
-	line-height: 46.6px;
+	/*line-height: 46.6px;*/
 }
 #img1 {
 	left:0px;
@@ -223,4 +224,14 @@
 #poweroff,
 #takeoff1, #takeoff0 {
 	display: none;
+}
+
+#tello-message {
+	margin-top: 5px;
+	width: 640px;
+	height: 5em;
+	font-size:small;
+	font-family: monospace;
+	border: 1px solid #ccc;
+	overflow: hidden;
 }
