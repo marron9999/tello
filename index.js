@@ -257,8 +257,8 @@ var args = [
 	"-f", "mpegts",				// 指定フォーマットで出力
 	"http://127.0.0.1:" + FFMPEG_PORT + "/stream"// 出力ファイルのパス
 ];
-if(emu) argv = argc;
-var streamer = spawn('ffmpeg', argv);
+if(emu) args = argc;
+var streamer = spawn('ffmpeg', args);
 streamer.stderr.pipe(process.stderr);
 streamer.on("exit", function(code){
 	console.log("ffmpeg failure:", code);
