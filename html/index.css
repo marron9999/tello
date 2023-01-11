@@ -45,10 +45,12 @@
 #table1 {
 	left:2px;
 	top: 2px;
+	width: 9em;
 }
 #table2 {
 	right:2px;
 	top: 2px;
+	width: 9em;
 }
 #table0 {
 	width: 640px;
@@ -96,31 +98,35 @@
 	left:0px;
 	top:0px;
 }
-#img1.go {
-	animation:rotate0 0.5s infinite linear;
-	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
-}
 #img2 {
 	right:0px;
 	top:0px;
-}
-#img2.go {
-	animation:rotate1 0.5s infinite linear;
-	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
 }
 #img3 {
 	right:0px;
 	bottom:9px;
 }
-#img3.go {
-	animation:rotate0 0.5s infinite linear;
-	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
-}
 #img4 {
 	left:0;
 	bottom:10px;
 }
-#img4.go {
+#img1.g0,
+#img3.g0 {
+	animation:rotate0 0.2s infinite linear;
+	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
+}
+#img2.g0,
+#img4.g0 {
+	animation:rotate1 0.2s infinite linear;
+	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
+}
+#img1.g1,
+#img3.g1 {
+	animation:rotate0 0.5s infinite linear;
+	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
+}
+#img2.g1,
+#img4.g1 {
 	animation:rotate1 0.5s infinite linear;
 	filter: invert(72%) sepia(26%) saturate(6428%) hue-rotate(1deg) brightness(105%) contrast(102%);
 }
@@ -228,10 +234,10 @@
 
 #tello-message {
 	margin-top: 5px;
-	width: 640px;
-	height: 5em;
+	margin-left: 2px;
 	font-size:small;
-	font-family: monospace;
-	border: 1px solid #ccc;
+	/*font-family: monospace;*/
+	text-align: left;
 	overflow: hidden;
+	line-height:1.1;
 }

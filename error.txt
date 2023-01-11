@@ -1,0 +1,32 @@
+Send: command to UDP
+frame= 4952 fps= 16 q=14.5 size=   17698kB time=00:05:20.20 bitrate= 452.
+frame= 4957 fps= 16 q=10.8 size=   17709kB time=00:05:20.83 bitrate= 452.
+frame= 4961 fps= 16 q=14.4 size=   17749kB time=00:05:21.36 bitrate= 452.
+frame= 4966 fps= 16 q=13.8 size=   17760kB time=00:05:22.03 bitrate= 451.
+frame= 4971 fps= 16 q=15.1 size=   17805kB time=00:05:22.66 bitrate= 452.
+frame= 4976 fps= 15 q=13.5 size=   17817kB time=00:05:23.30 bitrate= 451.
+frame= 4981 fps= 15 q=10.8 size=   17829kB time=00:05:23.96 bitrate= 450.
+frame= 4986 fps= 15 q=13.2 size=   17872kB time=00:05:24.60 bitrate= 451.
+Send: command to UDP
+frame= 4990 fps= 15 q=13.2 size=   17882kB time=00:05:25.13 bitrate= 450.
+frame= 4995 fps= 15 q=15.0 size=   17926kB time=00:05:25.76 bitrate= 450.
+frame= 5000 fps= 15 q=13.6 size=   17940kB time=00:05:26.43 bitrate= 450.
+frame= 5005 fps= 15 q=10.6 size=   17954kB time=00:05:27.06 bitrate= 449.
+Stream close: from ::ffff:127.0.0.1
+av_interleaved_write_frame(): Error number -10053 occurred
+Error muxing a packet for output file #0
+Error writing trailer of http://127.0.0.1:8081/stream: Error number -1005
+3 occurred
+frame= 5007 fps= 15 q=13.5 Lsize=   17990kB time=00:05:27.46 bitrate= 450
+.0kbits/s speed=1.01x
+video:15934kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB
+ muxing overhead: 12.904256%
+[http @ 0000020e0d92bf80] URL read error: Error number -10053 occurred
+Conversion failed!
+ffmpeg failure: 4294957243
+Send: command to UDP
+Send: command to UDP
+Send: command to UDP
+Send: command to UDP
+Send: command to UDP
+Send: command to UDP

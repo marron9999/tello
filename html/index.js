@@ -18,10 +18,10 @@ function offline(id) {
 }
 window.onload = function() {
 	let canvas = elm('video-canvas');
-	let url = 'ws://' + server + ':8081/stream';
+	let url = 'ws://' + server + ':8082/stream';
 	let player = new JSMpeg.Player(url, {canvas: canvas, audio: false});
 
-	ws = new WebSocket('ws://' + server + ':8082');
+	ws = new WebSocket('ws://' + server + ':8081');
 	ws.onmessage = function (event) {
 		if(event.data == "command ok") {
 			return;
@@ -37,6 +37,24 @@ window.onload = function() {
 		} else
 		if(event.data == "streamoff ok") {
 			elm('video-canvas').style.display = "none";
+		} else
+		if(event.data == "takeoff ok") {
+			elm("img1").className = "g1";
+			elm("img2").className = "g1";
+			elm("img3").className = "g1";
+			elm("img4").className = "g1";
+		} else
+		if(event.data == "land ok") {
+			elm("img1").className = "";
+			elm("img2").className = "";
+			elm("img3").className = "";
+			elm("img4").className = "";
+		} else
+		if(event.data == "emergency ok") {
+			elm("img1").className = "";
+			elm("img2").className = "";
+			elm("img3").className = "";
+			elm("img4").className = "";
 		}
 		let json = {};
 		let er=1;
@@ -190,24 +208,18 @@ function stream(sw) {
 }
 function takeoff(sw) {
 	if(sw > 0) {
-		ws.send("takeoff");
-		elm("img1").className = "go";
-		elm("img2").className = "go";
-		elm("img3").className = "go";
-		elm("img4").className = "go";
+		elm("img1").className = "g0";
+		elm("img2").className = "g0";
+		elm("img3").className = "g0";
+		elm("img4").className = "g0";
+		setTimeout(function() {
+			ws.send("takeoff");
+		}, 3000);
 		return;
 	}
 	if(sw < 0) {
 		ws.send("emergency");
-		elm("img1").className = "";
-		elm("img2").className = "";
-		elm("img3").className = "";
-		elm("img4").className = "";
 		return;
 	}
 	ws.send("land");
-	elm("img1").className = "";
-	elm("img2").className = "";
-	elm("img3").className = "";
-	elm("img4").className = "";
 }
