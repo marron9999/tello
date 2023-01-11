@@ -1,6 +1,6 @@
 // http://localhost:8080/index.html
 
-const emu = true;
+const emu = false;
 
 const http = require('http');
 const fs = require('fs');
@@ -241,6 +241,7 @@ var argc = [
 	"-b", "400k",				// ビデオレート指定(bits/s 単位) デフォルト200kbit/s
 	"-t","06:00:00",
 	//"-vf","scale=iw/2:-1",
+	"-an",						// 音なし
 	"-f", "mpegts",				// 指定フォーマットで出力
 	"http://127.0.0.1:" + FFMPEG_PORT + "/stream"// 出力ファイルのパス
 ];
@@ -252,6 +253,7 @@ var args = [
 	"-b", "400k",				// ビデオレート指定(bits/s 単位) デフォルト200kbit/s
 	"-t","06:00:00",
 	//"-vf","scale=iw/2:-1",
+	"-an",						// 音なし
 	"-f", "mpegts",				// 指定フォーマットで出力
 	"http://127.0.0.1:" + FFMPEG_PORT + "/stream"// 出力ファイルのパス
 ];
